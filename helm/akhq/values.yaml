@@ -8,13 +8,13 @@ image:
 annotations: {}
   #prometheus.io/scrape: 'true'
   #prometheus.io/port: '8080'
-  #prometheus.io/path: '/prometheus'
+#prometheus.io/path: '/prometheus'
 
 podAnnotations: {}
 
 # custom labels
 labels: {}
-  # custom.label: 'true'
+# custom.label: 'true'
 
 podLabels: {}
 
@@ -43,7 +43,17 @@ configuration:
 ##... and secret for connection information
 existingSecrets: ""
 # name of the existingSecret
-secrets: {}
+secrets:
+  akhq:
+    connections:
+      amqstreams-lab:
+        properties:
+          bootstrap.servers: "my-cluster-kafka-bootstrap.amq-streams.svc.cluster.local:9093"
+          security.protocol: SASL_SSL
+          sasl.mechanism: SCRAM-SHA-512
+          sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="akhq" password="NmfwVqrNZKyy";
+          ssl.truststore.location: /opt/kafka/cluster-ca-certs/ca.p12
+          ssl.truststore.password: bnnZ0bY9L79i
 #  akhq:
 #    connections:
 #      my-cluster-plain-text:
@@ -64,10 +74,20 @@ kafkaSecrets: []
 #Provide extra base64 encoded kubernetes secrets (keystore/truststore)
 
 # Any extra volumes to define for the pod (like keystore/truststore)
-extraVolumes: []
+
+extraVolumes:
+  - name: cluster-ca-cert
+    secret:
+      secretName: my-cluster-ca-cert
+      defaultMode: 420
 
 # Any extra volume mounts to define for the akhq container
-extraVolumeMounts: []
+extraVolumeMounts:
+  - name: cluster-ca-cert
+    mountPath: /opt/kafka/cluster-ca-certs/ca.p12
+    subPath: ca.p12
+
+
 
 # Specify ServiceAccount for pod
 serviceAccountName: null
@@ -89,7 +109,7 @@ initContainers: {}
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 securityContext: {}
   # runAsNonRoot: true
-  # runAsUser: 1000
+# runAsUser: 1000
 
 # Configure the Container Security Context
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -101,32 +121,33 @@ containerSecurityContext: {}
   #     - ALL
   # runAsNonRoot: true
   # runAsUser: 1001
-  # readOnlyRootFilesystem: true
+# readOnlyRootFilesystem: true
 
 service:
   enabled: true
   type: ClusterIP
-  port: 80
+  port: 8080
   managementPort: 28081
   #httpNodePort: 32551
   labels: {}
   annotations:
-    # cloud.google.com/load-balancer-type: "Internal"
+  # cloud.google.com/load-balancer-type: "Internal"
 
 ingress:
-  enabled: false
+  enabled: true
   ingressClassName: ""
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
   paths:
     - /
   hosts:
-    - akhq.demo.com
+    - akhq-my-cluster.apps.cluster-fxmxz.fxmxz.sandbox452.opentlc.com/
   tls: []
   #  - secretName: akhq-tls
   #    hosts:
   #      - akhq.demo.com
+
 
 ### Readiness / Liveness probe config.
 ### ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
@@ -160,7 +181,7 @@ resources: {}
   #  memory: 128Mi
   # requests:
   #  cpu: 100m
-  #  memory: 128Mi
+#  memory: 128Mi
 
 nodeSelector: {}
 
