@@ -48,12 +48,12 @@ secrets:
     connections:
       amqstreams-lab:
         properties:
-          bootstrap.servers: "my-cluster-kafka-bootstrap.amq-streams.svc.cluster.local:9093"
-          security.protocol: SASL_SSL
-          sasl.mechanism: SCRAM-SHA-512
-          sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="akhq" password="NmfwVqrNZKyy";
-          ssl.truststore.location: /opt/kafka/cluster-ca-certs/ca.p12
-          ssl.truststore.password: bnnZ0bY9L79i
+          bootstrap.servers: "my-cluster-kafka-bootstrap.amq-streams.svc.cluster.local:9092"
+#          security.protocol: SASL_SSL
+#          sasl.mechanism: SCRAM-SHA-512
+#          sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="akhq" password="NmfwVqrNZKyy";
+#          ssl.truststore.location: /opt/kafka/cluster-ca-certs/ca.p12
+#          ssl.truststore.password: bnnZ0bY9L79i
 #  akhq:
 #    connections:
 #      my-cluster-plain-text:
