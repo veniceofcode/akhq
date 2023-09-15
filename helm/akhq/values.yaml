@@ -46,7 +46,7 @@ existingSecrets: ""
 secrets:
   akhq:
     connections:
-      amqstreams-lab:
+      my-cluster:
         properties:
           bootstrap.servers: "my-cluster-kafka-bootstrap.amq-streams.svc.cluster.local:9092"
 #          security.protocol: SASL_SSL
@@ -75,17 +75,17 @@ kafkaSecrets: []
 
 # Any extra volumes to define for the pod (like keystore/truststore)
 
-extraVolumes:
-  - name: cluster-ca-cert
-    secret:
-      secretName: my-cluster-ca-cert
-      defaultMode: 420
+extraVolumes: []
+#  - name: cluster-ca-cert
+#    secret:
+#      secretName: my-cluster-ca-cert
+#      defaultMode: 420
 
 # Any extra volume mounts to define for the akhq container
-extraVolumeMounts:
-  - name: cluster-ca-cert
-    mountPath: /opt/kafka/cluster-ca-certs/ca.p12
-    subPath: ca.p12
+extraVolumeMounts: []
+#  - name: cluster-ca-cert
+#    mountPath: /opt/kafka/cluster-ca-certs/ca.p12
+#    subPath: ca.p12
 
 
 
